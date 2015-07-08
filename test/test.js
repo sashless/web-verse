@@ -42,12 +42,10 @@ describe('webverse', function() {
       var $citeable = webVerse.addIdentifiers($doc);
 
       var $h1 = $citeable.getElementsByTagName('h1')[0];
-      assert($h1.getAttribute('data-id'));
       assert.equal($h1.getAttribute('data-hash'), crypto.createHash('sha1').update('Hello', 'utf8').digest('hex'));
       assert.equal($h1.getAttribute('data-key'), 'HH');
 
       var $section = $citeable.getElementsByTagName('section')[0];
-      assert($section.getAttribute('data-id'));
       assert.equal($section.getAttribute('data-hash'), crypto.createHash('sha1').update('world', 'utf8').digest('hex'));
       assert(!$section.getAttribute('data-key'));
     });

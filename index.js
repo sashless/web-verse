@@ -2,7 +2,6 @@
 
 var crypto = require('crypto')
   , sbd = require('sbd')
-  , uuid = require('uuid')
   , levenshtein = require('fast-levenshtein');
 
 var citeable = exports.citeable = ['P', 'LI', 'DD', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'FIGCAPTION', 'CAPTION', 'ASIDE'];
@@ -203,7 +202,6 @@ exports.findKey = function(target, candidates) {
 
 exports.addIdentifiers = function($doc) {
   Array.prototype.forEach.call($doc.body.getElementsByTagName('*'), function($el) {
-    $el.setAttribute('data-id', uuid.v1());
     $el.setAttribute('data-hash', createHash($el));
     if (~citeable.indexOf($el.tagName)) {
       $el.setAttribute('data-key', createKey($el));
