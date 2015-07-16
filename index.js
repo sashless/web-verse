@@ -25,7 +25,6 @@ var createKey = exports.createKey = function($el) {
       while (node != null) {
         if(!isBlacklisted(node.nodeName.toLowerCase())){
           if (node.nodeType == 3) {
-            // Text node, do something, eg:
             textContents.push(node.textContent);
           } else if (node.nodeType == 1) {
             recursiveWalk(node);
