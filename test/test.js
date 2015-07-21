@@ -18,7 +18,7 @@ describe('webverse', function() {
   describe('createKey', function() {
     describe('regular structured dom', function(){
         var $doc;
-        before(function(done) {
+        beforeEach(function(done) {
           var html = '<html><body><style>first styles block</style><div>    I am a paragraph with 2 sentences.    <style>second style block</style> I am the second sentence.  Here is the third sentence.</div></body></html>';
           jsdom.env(html, function (err, window) {
             if (err) throw err;
@@ -37,7 +37,7 @@ describe('webverse', function() {
     });
     describe('irregular structured dom', function(){
       var $doc;
-      before(function(done) {
+      beforeEach(function(done) {
         var html = '<html><body><style></style><div><p>    I</p> <p>am  </p> <p>a</p> <p>paragraph</p> <p>with</p> <p>2</p> <p>sentences.</p>   <p>I</p> <p>am</p> <p>the</p> <p>second</p> <p>sentence.</p>  <p>Here</p> <p>is</p> <p>the</p> <p>third</p> <p>sentence.</p></div></body></html>';
         jsdom.env(html, function (err, window) {
           if (err) throw err;
@@ -58,7 +58,7 @@ describe('webverse', function() {
 
   describe('setBlacklist', function(){
     var $doc;
-    before(function(done) {
+    beforeEach(function(done) {
       var html = '<html><body><h1></h1><span></span></body></html>';
       jsdom.env(html, function (err, window) {
         if (err) throw err;
@@ -102,10 +102,10 @@ describe('webverse', function() {
     });
   });
 
-  describe('addIdentifiers', function() {
+  describe('addIdentifiers() should add identifiers', function() {
     var $doc;
 
-    before(function(done) {
+    beforeEach(function(done) {
       var html = '<html><body><h1>Hello</h1><section><p>world</p></section></body></html>';
       jsdom.env(html, function (err, window) {
         if (err) throw err;
@@ -115,7 +115,7 @@ describe('webverse', function() {
       });
     });
 
-    it('should add identifiers', function() {
+    it('to body and all children', function() {
       webVerse.addIdentifiers($doc);
       var $section = $doc.getElementsByTagName('section')[0];
 
@@ -126,12 +126,30 @@ describe('webverse', function() {
         key: 'test-key',
         hash: 'test-hash'
       });
+
       webVerse.addIdentifiers($doc);
 
       var $h1 = $doc.getElementsByTagName('h1')[0];
 
       assert($h1.getAttribute('test-key'));
       assert($h1.getAttribute('test-hash'));
+    });
+
+    it('to given element and all children', function() {
+      var $section = $doc.getElementsByTagName('section')[0];
+
+      webVerse.addIdentifiers($section);
+
+      assert($section.getAttribute('data-key'));
+      assert($section.getAttribute('data-hash'));
+
+      var $h1 = $doc.getElementsByTagName('h1')[0];
+
+      assert(!$h1.getAttribute('data-key'));
+      assert(!$h1.getAttribute('data-hash'));
+
+      assert(!$doc.body.getAttribute('data-key'));
+      assert(!$doc.body.getAttribute('data-hash'));
     });
   });
 });

@@ -255,17 +255,23 @@ var isBlacklisted = function(tagName) {
   return false;
 };
 
-exports.addIdentifiers = function($doc) {
-  $doc.body.setAttribute(identifier['key'], createKey($doc.body));
-  $doc.body.setAttribute(identifier['hash'], createHash($doc.body));
+exports.addIdentifiers = function(element) {
+  // seems to be a document
+  if (element.body) {
+    element = element.body;
+  }
 
-  Array.prototype.forEach.call($doc.body.getElementsByTagName('*'), function($el) {
+  element.setAttribute(identifier['key'], createKey(element));
+  element.setAttribute(identifier['hash'], createHash(element));
+
+  Array.prototype.forEach.call(element.getElementsByTagName('*'), function($el) {
     if (!isBlacklisted($el.tagName.toLowerCase())) {
       $el.setAttribute(identifier['key'], createKey($el));
       $el.setAttribute(identifier['hash'], createHash($el));
     }
   });
-  return $doc;
+
+  return element;
 };
 
 exports.getChildOffsets = function($parent, $child) {
